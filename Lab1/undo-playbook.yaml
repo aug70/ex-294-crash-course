@@ -1,0 +1,24 @@
+- name: Undo playbook
+  hosts: ansible2.example.com
+  tasks:
+    - name: Stop service
+      service:
+        name: httpd
+        state: stopped
+    - name: Remove httpd from firewalld
+      firewalld:
+        zone: public
+        service: http
+        permanent: yes
+        immediate: yes
+        state: disabled
+    - name: Remove index file
+      file:
+        path: /var/www/html/index.html
+        state: absent
+    - name: Uninstall httpd package.
+      package:
+        name: httpd
+        state: absent
+
+

@@ -1,0 +1,43 @@
+- name: Install httpd playbook
+  hosts: ansible2.example.com
+  tasks:
+    - name: Install httpd package
+      package:
+        name: httpd
+        state: present
+    - name: Set permissions
+      file:
+        path: /var/www/html
+        state: directory
+        mode: '0755'
+        recurse: yes
+    - name: Create index file
+      copy:
+        content: "hello!"
+        dest: /var/www/html/index.html
+        mode: '0644'
+    - name: Enable and start service httpd
+      service:
+        name: httpd
+        enabled: true
+        state: started
+    - name: Enable firewall
+      firewalld:
+        zone: public
+        service: http
+        permanent: yes
+        immediate: yes
+        state: enabled
+
+- name: Test playbook
+  hosts: localhost
+  tasks:
+    - name: Open index page
+      uri:
+        url: http://ansible2.example.com/index.html
+        method: GET
+        return_content: yes
+        status_code: 200
+      #register: this
+      #failed_when: "'hello' not in this.content"
+
