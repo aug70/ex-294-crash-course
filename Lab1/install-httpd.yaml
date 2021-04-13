@@ -21,7 +21,12 @@
         name: httpd
         enabled: true
         state: started
-    - name: Enable firewall
+    - name: Enable and start service firewalld
+      service:
+        name: firewalld
+        enabled: true
+        state: started
+    - name: Enable http service on firewall 
       firewalld:
         zone: public
         service: http
