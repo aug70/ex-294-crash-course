@@ -1,0 +1,21 @@
+- name: Undo playbook
+  hosts: ansible1
+  tasks:
+    - name: Remove groups.
+      group:
+        name: "{{ item.groupname}}"
+        state: absent
+      loop: "{{ group_names }}"
+    - name: Remove admins sudoers config file.
+      file:
+        path: /etc/sudoers.d/admins
+        state: absent
+    - name: Remove users.
+      user:
+        name: "{{ item.username }}"
+        state: absent
+        #groups: "{{ item.group }}"
+        #append: yes
+        #password: "{{ item.password | password_hash('sha512') }}"
+      loop: "{{ users }}"
+
