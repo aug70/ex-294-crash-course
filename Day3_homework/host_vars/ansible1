@@ -1,7 +1,7 @@
 # • Users sharon and blair are a member of the group admins, users ashley and bob are a member of the group students
 # • On the managed hosts, members of the group admins should have sudo privileges to run any command they want
 # • All users must be configured with the default password "password"
-
+---
 group_names:
   - groupname: admins
   - groupname: students

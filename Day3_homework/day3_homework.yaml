@@ -6,11 +6,24 @@
 #keys to the corresponding user account on the remote host, without having to
 #enter a password. Make sure that the setup meets the following requirements.
 
-#• Create users sharon, blair, ashley and bob
-#• Users sharon and blair are a member of the group admins, users ashley and bob are a member of the group students
-#• On the managed hosts, members of the group admins should have sudo privileges to run any command they want
-#• All users must be configured with the default password "password"
+# • Create users sharon, blair, ashley and bob
+# • Users sharon and blair are a member of the group admins, users ashley and bob are a member of the group students
+# • On the managed hosts, members of the group admins should have sudo privileges to run any command they want
+# • All users must be configured with the default password "password"
 #
+- name: Prep
+  hosts: localhost
+  tasks:
+    - name: Clean up
+      command: "rm -rf ./files/id_rsa ./files/id_rsa.pub"
+      #file:
+      #  path:
+      #    - ./files/id_rsa
+      #    - ./files/id_rsa.pub
+      #  state: absent
+    - name: Create ssh keys
+      command: "ssh-keygen -q -t rsa -N '' -f ./files/id_rsa"
+
 - name: Day 3 Homework
   hosts: ansible1
   tasks:
