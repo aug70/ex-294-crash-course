@@ -1,0 +1,19 @@
+- name: Exercise
+  hosts: all
+  tasks:
+    - name: Detect disk
+      shell:
+        cmd: fdisk -l /dev/sdb
+      register: output
+      failed_when: False
+    # - name: Display message - No second disk
+    #   debug:
+    #     msg: You don't have a second disk.
+    #   when: output.rc != 0
+    # - name: Display message - Second disk
+    #   debug:
+    #     msg: You have a second disk
+    #   when: output.rc == 0
+    - name: Debug
+      debug:
+        msg: You have {{ 'a' if output.rc == 0 else 'no' }} second disk!
