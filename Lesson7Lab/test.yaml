@@ -1,0 +1,18 @@
+- name: Test Playbook
+  hosts: ansible1
+  ignore_errors: yes
+  tasks:
+    - name: Test firewalld config, make sure ftp is in services.
+      shell: firewall-cmd --list-all | grep ftp
+    - name: SELinux boolean.
+      shell: getsebool ftpd_anon_write
+    - name: /var/ftp/pub directory exists and have 0777 permissions
+      shell: stat /var/ftp/pub
+    - name: Check vsftpd service
+      shell: systemctl status vsftpd
+
+# - name: Test ftp
+#   hosts: localhost
+#   tasks:
+#     - name: Transfer /etc/hosts file
+#       command: ftp 

@@ -1,0 +1,31 @@
+- name: Undo Playbook
+  hosts: ansible1
+  tasks:
+    - name: Close firewall for ftp service
+      firewalld:
+        zone: public
+        service: ftp
+        state: disabled
+        permanent: yes
+        immediate: yes
+    - name: Uninstall ftp and se policy stuff
+      package:
+        name:
+          - vsftpd
+          - policycoreutils-python-utils
+        state: absent
+    - name: Remove conf file
+      file:
+        path: /etc/vsftpd/vsftpd.conf
+        state: absent
+    - name: Remove ftp dir
+      file:
+        path: /var/ftp/pub
+        state: absent
+    - name: Set ftpd_anon_write flag on and keep it persistent
+      seboolean:
+        name: ftpd_anon_write
+        state: no
+        persistent: yes
+
+
