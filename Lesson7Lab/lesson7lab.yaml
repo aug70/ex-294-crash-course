@@ -25,17 +25,15 @@
       file:
         state: directory
         path: /var/ftp/pub
-        # recurse: yes
         mode: '0777'
-        # owner: foo
-        # group: foo
     - name: Prepare vsftpd.conf file
       template:
         src: vsftpd.conf.j2
         dest: /etc/vsftpd/vsftpd.conf
-        # owner: bin
-        # group: wheel
-        # mode: '0644'
+    - name: Install policycoreutils-python-utils
+      yum:
+        name: policycoreutils-python-utils
+        state: installed
     - name: Set ftpd_anon_write flag on and keep it persistent
       seboolean:
         name: ftpd_anon_write
@@ -46,8 +44,7 @@
         target: '/var/ftp/pub(/.*)?'
         setype: public_content_rw_t
         state: present
-    - name: Apply new SELinux file context to filesystem
-      command: restorecon -irv /var/ftp/pub
+      notify: Run restorecon
     - name: Start services
       service:
         name: vsftpd
@@ -60,6 +57,8 @@
         permanent: yes
         immediate: yes
         state: enabled
-
+  handlers:
+    - name: Run restorecon
+      command: restorecon -irv /var/ftp/pub
 
 
