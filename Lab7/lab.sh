@@ -1,17 +1,14 @@
-- name: Setup a new machine
-  hosts: 192.168.1.99
-  tasks:
-    - name: Install Python
-      raw:
-        free_form: yum install -y python3
-    - name: Copy ssh id
-      raw:
-        free_form: 
-    - name: Setup ssh with root access
-      raw:
-        free_form:
-    - name: Name machine
-      raw:
-        free_form: hostnamectl set-hostname worker3
-    
+#!/usr/bin/env bash
+IP_ADDRESS=192.168.1.96
+NEW_INVENTORY=./inventory_tmp
+NEW_MACHINE=ansible3
 
+#echo ${IP_ADDRESS} ansible3.example.com ansible3 >> /etc/hosts
+
+cat inventory > ${NEW_INVENTORY}
+echo ${NEW_MACHINE} >> ${NEW_INVENTORY}
+
+ansible -i ${NEW_INVENTORY} ${NEW_MACHINE} -m raw -a "yum install -y python3"
+
+#cat ${NEW_INVENTORY}
+rm -rf ${NEW_INVENTORY}
