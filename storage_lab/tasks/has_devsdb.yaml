@@ -1,0 +1,11 @@
+- name: Detect disk
+  shell:
+    cmd: fdisk -l /dev/sdb
+  register: output
+  failed_when: False
+- name: Quit if no second disk
+  assert:
+    that: 
+      - "{{ output.rc == 0 }}"
+    fail_msg: "No /dev/sdb"
+    success_msg: "/dev/sdb exists"
